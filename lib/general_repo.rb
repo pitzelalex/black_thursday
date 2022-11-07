@@ -2,10 +2,11 @@
 
 require_relative 'general'
 require_relative 'calculable'
+require_relative 'timeable'
 
 # this is the GeneralRepo supeclass
 class GeneralRepo
-  include Calculable
+  include Calculable, Timeable
   attr_reader :repository,
               :engine
 
@@ -26,7 +27,7 @@ class GeneralRepo
 
   def create(general_data)
     general_data[:id] ||= (@repository.last.id.to_i + 1).to_s
-    general = Object.const_get(@class_nm).new(general_data, self)
+    general = @class_nm.new(general_data, self)
     @repository << general
     general
   end
