@@ -36,9 +36,9 @@ class SalesEngine
     return @invoices if invoices.respond_to?(method)
     return @merchants if merchants.respond_to?(method)
     return @items if items.respond_to?(method)
-    return @invoice_items if invoice_items.respond_to?(method)
-    return @transactions if transactions.respond_to?(method)
-    return @customers if customers.respond_to?(method)
+    # return @invoice_items if invoice_items.respond_to?(method) Unused by SA
+    # return @transactions if transactions.respond_to?(method)  Unused by SA
+    # return @customers if customers.respond_to?(method) Unused in iterations 1-4
   end
 
   # Generic helper method for sending method calls to correct Repo.

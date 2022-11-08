@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require './lib/item'
 require './lib/item_repository'
 require 'bigdecimal'
@@ -6,12 +7,12 @@ require 'bigdecimal'
 describe Item do
   before(:each) do
     @item_list = {
-      id:          1,
-      name:        'Pencil',
+      id: 1,
+      name: 'Pencil',
       description: 'You can use it to write things',
-      unit_price:  BigDecimal(10.99, 4),
-      created_at:  Time.now,
-      updated_at:  Time.now,
+      unit_price: BigDecimal(10.99, 4),
+      created_at: Time.now,
+      updated_at: Time.now,
       merchant_id: 2
     }
 
@@ -69,7 +70,7 @@ describe Item do
     it 'returns item unit price converted to money format' do
       expect(@item.unit_price_to_dollars).to eq(10.99)
 
-      @item_list[:unit_price] = 17000
+      @item_list[:unit_price] = 17_000
       @item = Item.new(@item_list, @ir)
 
       expect(@item.unit_price_to_dollars).to eq(170.0)

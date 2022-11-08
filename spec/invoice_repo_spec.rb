@@ -91,13 +91,6 @@ RSpec.describe InvoiceRepo do
     end
   end
 
-  describe '#convert_int_to_day(num)' do
-    it 'converts an integer numeric value into a string weekday' do
-      expect(ir.convert_int_to_day(3)).to eq('Wednesday')
-      expect(ir.convert_int_to_day(7)).to eq(nil)
-    end
-  end
-
   describe '#number_of_invoices_per_day' do
     it 'returns a hash containing invoice counts by a dayname=>count structure' do
       expect(ir.number_of_invoices_per_day.keys).to eq(
@@ -109,22 +102,12 @@ RSpec.describe InvoiceRepo do
 
   describe '#average_invoices_per_day' do
     it 'returns the average number of invoices per day' do
-      engine = double('engine')
-      invoices = double('invoice_repo')
-      allow(ir).to receive(:engine).and_return(engine)
-      allow(engine).to receive(:invoices).and_return(invoices)
-
       expect(ir.average_invoices_per_day).to eq(1.25)
     end
   end
 
   describe '#average_invoices_per_day_standard_deviation' do
     it 'returns the deviation for average number of invoices per day' do
-      engine = double('engine')
-      invoices = double('invoice_repo')
-      allow(ir).to receive(:engine).and_return(engine)
-      allow(engine).to receive(:invoices).and_return(invoices)
-
       expect(ir.average_invoices_per_day_standard_deviation).to eq(0.5)
     end
   end
@@ -163,6 +146,7 @@ RSpec.describe InvoiceRepo do
       allow(invoice5).to receive(:paid?).and_return(false)
 
       expect(ir.all_invoices_paid_on('2009-02-07')).to eq([invoice1, invoice4])
+      expect(ir.all_invoices_paid_on(Time.parse('2009-02-07'))).to eq([invoice1, invoice4])
     end
   end
 
