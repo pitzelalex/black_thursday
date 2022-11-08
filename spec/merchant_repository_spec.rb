@@ -143,31 +143,35 @@ describe MerchantRepository do
 
   describe '#top_merchants_by_invoice_count' do
     it 'returns a collection of the merchants with a high deviation to the average' do
-      engine = double('engine')
-      invoices = double('invoice_repo')
-      allow(mr).to receive(:engine).and_return(engine)
-      allow(engine).to receive(:invoices).and_return(invoices)
-      allow(mr.all[0]).to receive(:_invoices).and_return(['invoice1'])
-      allow(mr.all[1]).to receive(:_invoices).and_return(['invoice1', 'invoice2'])
-      allow(mr.all[2]).to receive(:_invoices).and_return(['invoice1', 'invoice2', 'invoice3'])
-      allow(mr.all[3]).to receive(:_invoices).and_return(['invoice1'])
+      mr5 = mr.create(id: 5, name: "Dale")
+      mr6 = mr.create(id: 6, name: "Dick")
+      mr7 = mr.create(id: 7, name: "Doug")
+      allow(mr.all[0]).to receive(:invoice_count).and_return(2)
+      allow(mr.all[1]).to receive(:invoice_count).and_return(2)
+      allow(mr.all[2]).to receive(:invoice_count).and_return(2)
+      allow(mr.all[3]).to receive(:invoice_count).and_return(2)
+      allow(mr.all[4]).to receive(:invoice_count).and_return(2)
+      allow(mr.all[5]).to receive(:invoice_count).and_return(2)
+      allow(mr.all[6]).to receive(:invoice_count).and_return(6)
 
-      expect(mr.top_merchants_by_invoice_count).to eq([])
+      expect(mr.top_merchants_by_invoice_count).to eq([mr.all[6]])
     end
   end
 
   describe '#bottom_merchants_by_invoice_count' do
     it 'returns a collection of the merchants with a low deviation to the average' do
-      engine = double('engine')
-      invoices = double('invoice_repo')
-      allow(mr).to receive(:engine).and_return(engine)
-      allow(engine).to receive(:invoices).and_return(invoices)
-      allow(mr.all[0]).to receive(:_invoices).and_return(['invoice1'])
-      allow(mr.all[1]).to receive(:_invoices).and_return(['invoice1', 'invoice2'])
-      allow(mr.all[2]).to receive(:_invoices).and_return(['invoice1', 'invoice2', 'invoice3'])
-      allow(mr.all[3]).to receive(:_invoices).and_return(['invoice1'])
+      mr5 = mr.create(id: 5, name: "Dale")
+      mr6 = mr.create(id: 6, name: "Dick")
+      mr7 = mr.create(id: 7, name: "Doug")
+      allow(mr.all[0]).to receive(:invoice_count).and_return(2)
+      allow(mr.all[1]).to receive(:invoice_count).and_return(6)
+      allow(mr.all[2]).to receive(:invoice_count).and_return(6)
+      allow(mr.all[3]).to receive(:invoice_count).and_return(6)
+      allow(mr.all[4]).to receive(:invoice_count).and_return(6)
+      allow(mr.all[5]).to receive(:invoice_count).and_return(6)
+      allow(mr.all[6]).to receive(:invoice_count).and_return(6)
 
-      expect(mr.bottom_merchants_by_invoice_count).to eq([])
+      expect(mr.bottom_merchants_by_invoice_count).to eq([mr.all[0]])
     end
   end
 
@@ -200,30 +204,23 @@ describe MerchantRepository do
 
   describe '#merchants_with_only_one_item' do
     it 'returns a collection of merchants who only have one item' do
-      engine = double('engine')
-      items = double('items_repo')
       allow(mr.all[0]).to receive(:item_count).and_return(1.0)
       allow(mr.all[1]).to receive(:item_count).and_return(2.0)
       allow(mr.all[2]).to receive(:item_count).and_return(4.0)
       allow(mr.all[3]).to receive(:item_count).and_return(7.0)
-      allow(mr).to receive(:engine).and_return(engine)
-      allow(engine).to receive(:items).and_return(items)
       expect(mr.merchants_with_only_one_item).to eq([mr.all[0]])
     end
   end
 
   describe '#merchants_with_only_one_item_registered_in_month' do
-    it 'returns a collection of merchanta who only have one item' do
-      
+    it 'returns a collection of merchants who only have one item' do
       allow(mr.all[0]).to receive(:item_count).and_return(1.0)
       allow(mr.all[1]).to receive(:item_count).and_return(2.0)
       allow(mr.all[2]).to receive(:item_count).and_return(4.0)
       allow(mr.all[0]).to receive(:created_at).and_return(Time.parse('2012-03-26 20:56:56 UTC'))
       allow(mr.all[1]).to receive(:created_at).and_return(Time.parse('2012-06-26 20:56:56 UTC'))
       allow(mr.all[2]).to receive(:created_at).and_return(Time.parse('2012-09-26 20:56:56 UTC'))
-      allow(mr).to receive(:engine).and_return(engine)
-      allow(engine).to receive(:items).and_return(items)
-      allow(items).to receive(:find_all_by_merchant_id).and_return([mr.all[0], mr.all[1], mr.all[2]])
+      allow(mr).to receive(:merchants_with_only_one_item).and_return([mr.all[0]])
       expect(mr.merchants_with_only_one_item_registered_in_month('March')).to eq([mr.all[0]])
     end
   end
