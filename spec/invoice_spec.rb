@@ -43,7 +43,7 @@ RSpec.describe Invoice do
              }
       invoice = Invoice.new(data, ir)
 
-      expect(invoice.update({status: :shipped})).to be_within(0.5).of Time.now
+      expect(invoice.update({ status: :shipped })).to be_within(0.5).of Time.now
       expect(invoice.status).to eq :shipped
     end
   end

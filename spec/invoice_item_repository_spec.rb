@@ -61,7 +61,7 @@ describe InvoiceItemRepository do
 
     describe '#update' do
       it 'updates the InvoiceItem instance that matches the id with the provided name' do
-        iir.update('2',
+        iir.update(2,
                    {
                      quantity: 2,
                      unit_price: BigDecimal(11.69, 4)
@@ -73,7 +73,7 @@ describe InvoiceItemRepository do
 
     describe '#delete' do
       it 'removes a InvoiceItem instance with the corresponding id' do
-        iir.delete('2')
+        iir.delete(2)
         expect(iir.repository.count).to eq(3)
         expect(iir.repository[2].id).to eq(4)
       end

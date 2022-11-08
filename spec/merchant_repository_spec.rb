@@ -112,13 +112,11 @@ describe MerchantRepository do
 
   describe '#number_of_invoices_per_merchant' do
     it 'returns the number of invoices per merchant' do
-      engine = double('engine')
-      invoices = double('invoice_repo')
-      allow(mr).to receive(:engine).and_return(engine)
-      allow(engine).to receive(:invoices).and_return(invoices)
-      allow(invoices).to receive(:find_all_by_merchant_id).and_return(['invoice1', 'invoice2'])
-
-      expect(mr.number_of_invoices_per_merchant).to eq [2, 2, 2, 2]
+      allow(mr.all[0]).to receive(:invoice_count).and_return(2)
+      allow(mr.all[1]).to receive(:invoice_count).and_return(3)
+      allow(mr.all[2]).to receive(:invoice_count).and_return(4)
+      allow(mr.all[3]).to receive(:invoice_count).and_return(1)
+      expect(mr.number_of_invoices_per_merchant).to eq [2, 3, 4, 1]
     end
   end
 
@@ -216,8 +214,7 @@ describe MerchantRepository do
 
   describe '#merchants_with_only_one_item_registered_in_month' do
     it 'returns a collection of merchanta who only have one item' do
-      engine = double('engine')
-      items = double('item_repo')
+      
       allow(mr.all[0]).to receive(:item_count).and_return(1.0)
       allow(mr.all[1]).to receive(:item_count).and_return(2.0)
       allow(mr.all[2]).to receive(:item_count).and_return(4.0)
@@ -230,7 +227,7 @@ describe MerchantRepository do
       expect(mr.merchants_with_only_one_item_registered_in_month('March')).to eq([mr.all[0]])
     end
   end
-  
+
   describe '#merchants_with_pending_invoices' do
     it 'returns an array of merchants with pending invoices' do
       allow(mr.all[0]).to receive(:invoice_pending?).and_return(true)
@@ -262,7 +259,7 @@ describe MerchantRepository do
     it 'returns the total revenue of a given merchant' do
       allow(mr.all[0]).to receive(:revenue).and_return(30000)
       
-      expect(mr.revenue_by_merchant('12334105')).to eq(30000)
+      expect(mr.revenue_by_merchant(12334105)).to eq(30000)
     end
   end
 end

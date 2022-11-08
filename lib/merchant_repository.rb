@@ -5,7 +5,8 @@ require_relative 'general_repo'
 
 # This is the MerchantRepository Class
 class MerchantRepository < GeneralRepo
-  attr_reader :repository
+  attr_reader :repository,
+              :engine
 
   def initialize(data, engine)
     super(Merchant, data, engine)

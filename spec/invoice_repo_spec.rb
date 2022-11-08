@@ -77,7 +77,7 @@ RSpec.describe InvoiceRepo do
   describe '#update' do
     it 'updates Invoice with corresponding id with the provided attributes' do
       expect(ir.repository[0].status).to eq :pending
-      ir.update('1', { status: :shipped })
+      ir.update(1, { status: :shipped })
       expect(ir.repository[0].status).to eq :shipped
       expect(ir.repository[0].updated_at).to be_within(0.5).of Time.now
     end
@@ -85,7 +85,7 @@ RSpec.describe InvoiceRepo do
 
   describe '#delete' do
     it 'deletes the Invoice instance with corresponding id' do
-      ir.delete('1')
+      ir.delete(1)
       expect(ir.repository.count).to eq(4)
       expect(ir.repository[0].id).to eq(2)
     end
