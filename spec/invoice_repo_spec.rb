@@ -77,7 +77,7 @@ RSpec.describe InvoiceRepo do
   describe '#update' do
     it 'updates Invoice with corresponding id with the provided attributes' do
       expect(ir.repository[0].status).to eq :pending
-      ir.update('1', { status: :shipped })
+      ir.update(1, { status: :shipped })
       expect(ir.repository[0].status).to eq :shipped
       expect(ir.repository[0].updated_at).to be_within(0.5).of Time.now
     end
@@ -85,16 +85,9 @@ RSpec.describe InvoiceRepo do
 
   describe '#delete' do
     it 'deletes the Invoice instance with corresponding id' do
-      ir.delete('1')
+      ir.delete(1)
       expect(ir.repository.count).to eq(4)
       expect(ir.repository[0].id).to eq(2)
-    end
-  end
-
-  describe '#convert_int_to_day(num)' do
-    it 'converts an integer numeric value into a string weekday' do
-      expect(ir.convert_int_to_day(3)).to eq('Wednesday')
-      expect(ir.convert_int_to_day(7)).to eq(nil)
     end
   end
 
@@ -109,22 +102,12 @@ RSpec.describe InvoiceRepo do
 
   describe '#average_invoices_per_day' do
     it 'returns the average number of invoices per day' do
-      engine = double('engine')
-      invoices = double('invoice_repo')
-      allow(ir).to receive(:engine).and_return(engine)
-      allow(engine).to receive(:invoices).and_return(invoices)
-
       expect(ir.average_invoices_per_day).to eq(1.25)
     end
   end
 
   describe '#average_invoices_per_day_standard_deviation' do
     it 'returns the deviation for average number of invoices per day' do
-      engine = double('engine')
-      invoices = double('invoice_repo')
-      allow(ir).to receive(:engine).and_return(engine)
-      allow(engine).to receive(:invoices).and_return(invoices)
-
       expect(ir.average_invoices_per_day_standard_deviation).to eq(0.5)
     end
   end
@@ -163,6 +146,7 @@ RSpec.describe InvoiceRepo do
       allow(invoice5).to receive(:paid?).and_return(false)
 
       expect(ir.all_invoices_paid_on('2009-02-07')).to eq([invoice1, invoice4])
+      expect(ir.all_invoices_paid_on(Time.parse('2009-02-07'))).to eq([invoice1, invoice4])
     end
   end
 

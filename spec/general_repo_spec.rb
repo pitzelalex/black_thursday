@@ -87,4 +87,10 @@ RSpec.describe GeneralRepo do
       gr.send_to_engine
     end
   end
+
+  describe '#inspect' do
+    it 'returns the name of the class and the size of its repo' do
+      expect(gr.inspect).to eq "#<GeneralRepo 5 rows>"
+    end
+  end
 end

@@ -27,12 +27,12 @@ describe ItemRepository do
   describe '#create' do
     it 'creates an item based on the values passed in' do
       @ir.create(
-        id:          1,
-        name:        'Pencil',
+        id: 1,
+        name: 'Pencil',
         description: 'You can use it to write things',
-        unit_price:  BigDecimal(10.99, 4),
-        created_at:  Time.now,
-        updated_at:  Time.now,
+        unit_price: BigDecimal(10.99, 4),
+        created_at: Time.now,
+        updated_at: Time.now,
         merchant_id: 2
       )
 
@@ -48,8 +48,8 @@ describe ItemRepository do
 
   describe '#find_by_id' do
     it 'searches for specific item id and returns item or nil if empty' do
-      expect(@ir.find_by_id(263395237)).to eq(@item1)
-      expect(@ir.find_by_id(263395537)).to eq(nil)
+      expect(@ir.find_by_id(263_395_237)).to eq(@item1)
+      expect(@ir.find_by_id(263_395_537)).to eq(nil)
     end
   end
 
@@ -63,7 +63,7 @@ describe ItemRepository do
   describe '#clean_string' do
     it 'returns a string after removing spaces and newline characters' do
       unclean = "Free standing wooden\n letters \n15cm Any colours\n"
-      cleaned = "Freestandingwoodenletters15cmAnycolours"
+      cleaned = 'Freestandingwoodenletters15cmAnycolours'
       expect(@ir.clean_string(unclean)).to eq(cleaned)
     end
   end
@@ -92,14 +92,14 @@ describe ItemRepository do
 
   describe '#find_all_by_merchant_id' do
     it 'searches for merchant id and returns items' do
-      expect(@ir.find_all_by_merchant_id(12334141)).to eq([@item1])
-      expect(@ir.find_all_by_merchant_id(12334615)).to eq([])
+      expect(@ir.find_all_by_merchant_id(12_334_141)).to eq([@item1])
+      expect(@ir.find_all_by_merchant_id(12_334_615)).to eq([])
     end
   end
 
   describe '#update' do
     it 'updates the values of the item at id with attributes passed in' do
-      @ir.update(263395237,{ name: 'Turkey Leg', unit_price: 100 })
+      @ir.update(263_395_237, { name: 'Turkey Leg', unit_price: 100 })
       expect(@item1.name).to eq('Turkey Leg')
       expect(@item1.unit_price_to_dollars).to eq(1.00)
     end
@@ -107,7 +107,7 @@ describe ItemRepository do
 
   describe '#delete' do
     it 'deletes the item at the specified id index' do
-      @ir.delete(263395237)
+      @ir.delete(263_395_237)
       expect(@ir.all).to eq([@item2, @item3, @item4, @item5])
     end
   end

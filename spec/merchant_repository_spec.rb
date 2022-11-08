@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rspec'
 require 'csv'
 require './lib/merchant_repository'
@@ -5,7 +7,7 @@ require './lib/general_repo'
 
 describe MerchantRepository do
   let(:data) { CSV.open './data/merchants_test.csv', headers: true, header_converters: :symbol }
-  let(:mr) { MerchantRepository.new(data, "salesengine") }
+  let(:mr) { MerchantRepository.new(data, 'salesengine') }
 
   describe '#initialize' do
     it 'is and instance of MerchantRepository' do
@@ -65,16 +67,16 @@ describe MerchantRepository do
 
   describe '#update' do
     it 'updates the Merchant instance that matches the id with the provided name' do
-      mr.update(12334115, { name: 'UpdatedMarleys' })
-      expect(mr.find_by_id(12334115).name).to eq('UpdatedMarleys')
+      mr.update(12_334_115, { name: 'UpdatedMarleys' })
+      expect(mr.find_by_id(12_334_115).name).to eq('UpdatedMarleys')
     end
   end
 
   describe '#delete' do
     it 'removes a Merchant instance with the corresponding id' do
-      mr.delete(12334113)
+      mr.delete(12_334_113)
       expect(mr.repository.count).to eq(3)
-      expect(mr.repository[2].id).to eq(12334115)
+      expect(mr.repository[2].id).to eq(12_334_115)
     end
   end
 
@@ -89,14 +91,14 @@ describe MerchantRepository do
     end
   end
 
-  describe '#average_items_per_merchant' do
+  describe '#_average_items_per_merchant' do
     it 'returns the average number of items per merchant' do
       allow(mr.all[0]).to receive(:_items).and_return(['item'])
       allow(mr.all[1]).to receive(:_items).and_return(['item1', 'item2'])
       allow(mr.all[2]).to receive(:_items).and_return(['item', 'item2', 'item3'])
       allow(mr.all[3]).to receive(:_items).and_return(['item'])
 
-      expect(mr.average_items_per_merchant).to eq 1.75
+      expect(mr._average_items_per_merchant).to eq 1.75
     end
   end
 
@@ -112,12 +114,11 @@ describe MerchantRepository do
 
   describe '#number_of_invoices_per_merchant' do
     it 'returns the number of invoices per merchant' do
-      allow(mr.all[0]).to receive(:_invoices).and_return(['invoice1'])
-      allow(mr.all[1]).to receive(:_invoices).and_return(['invoice1', 'invoice2'])
-      allow(mr.all[2]).to receive(:_invoices).and_return(['invoice1', 'invoice2', 'invoice3'])
-      allow(mr.all[3]).to receive(:_invoices).and_return(['invoice1'])
-
-      expect(mr.number_of_invoices_per_merchant).to eq [1, 2, 3, 1]
+      allow(mr.all[0]).to receive(:invoice_count).and_return(2)
+      allow(mr.all[1]).to receive(:invoice_count).and_return(3)
+      allow(mr.all[2]).to receive(:invoice_count).and_return(4)
+      allow(mr.all[3]).to receive(:invoice_count).and_return(1)
+      expect(mr.number_of_invoices_per_merchant).to eq [2, 3, 4, 1]
     end
   end
 
@@ -144,9 +145,9 @@ describe MerchantRepository do
 
   describe '#top_merchants_by_invoice_count' do
     it 'returns a collection of the merchants with a high deviation to the average' do
-      mr5 = mr.create(id: 5, name: "Dale")
-      mr6 = mr.create(id: 6, name: "Dick")
-      mr7 = mr.create(id: 7, name: "Doug")
+      mr5 = mr.create(id: 5, name: 'Dale')
+      mr6 = mr.create(id: 6, name: 'Dick')
+      mr7 = mr.create(id: 7, name: 'Doug')
       allow(mr.all[0]).to receive(:invoice_count).and_return(2)
       allow(mr.all[1]).to receive(:invoice_count).and_return(2)
       allow(mr.all[2]).to receive(:invoice_count).and_return(2)
@@ -161,9 +162,9 @@ describe MerchantRepository do
 
   describe '#bottom_merchants_by_invoice_count' do
     it 'returns a collection of the merchants with a low deviation to the average' do
-      mr5 = mr.create(id: 5, name: "Dale")
-      mr6 = mr.create(id: 6, name: "Dick")
-      mr7 = mr.create(id: 7, name: "Doug")
+      mr5 = mr.create(id: 5, name: 'Dale')
+      mr6 = mr.create(id: 6, name: 'Dick')
+      mr7 = mr.create(id: 7, name: 'Doug')
       allow(mr.all[0]).to receive(:invoice_count).and_return(2)
       allow(mr.all[1]).to receive(:invoice_count).and_return(6)
       allow(mr.all[2]).to receive(:invoice_count).and_return(6)
@@ -225,7 +226,7 @@ describe MerchantRepository do
       expect(mr.merchants_with_only_one_item_registered_in_month('March')).to eq([mr.all[0]])
     end
   end
-  
+
   describe '#merchants_with_pending_invoices' do
     it 'returns an array of merchants with pending invoices' do
       allow(mr.all[0]).to receive(:invoice_pending?).and_return(true)
@@ -238,10 +239,10 @@ describe MerchantRepository do
 
   describe '#top_revenue_earners' do
     it 'returns an array of x merchants ranked by revenue' do
-      allow(mr.all[0]).to receive(:revenue).and_return(30000)
-      allow(mr.all[1]).to receive(:revenue).and_return(5000)
-      allow(mr.all[2]).to receive(:revenue).and_return(60000)
-      allow(mr.all[3]).to receive(:revenue).and_return(25000)
+      allow(mr.all[0]).to receive(:revenue).and_return(30_000)
+      allow(mr.all[1]).to receive(:revenue).and_return(5_000)
+      allow(mr.all[2]).to receive(:revenue).and_return(60_000)
+      allow(mr.all[3]).to receive(:revenue).and_return(25_000)
       m1 = mr.repository[0]
       m2 = mr.repository[1]
       m3 = mr.repository[2]
@@ -255,9 +256,9 @@ describe MerchantRepository do
 
   describe '#revenue_by_merchant' do
     it 'returns the total revenue of a given merchant' do
-      allow(mr.all[0]).to receive(:revenue).and_return(30000)
-      
-      expect(mr.revenue_by_merchant('12334105')).to eq(30000)
+      allow(mr.all[0]).to receive(:revenue).and_return(30_000)
+
+      expect(mr.revenue_by_merchant(12_334_105)).to eq(30_000)
     end
   end
 end
