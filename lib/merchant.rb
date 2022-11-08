@@ -25,11 +25,7 @@ class Merchant
 
   # Fetches items owned by merchant
   def _items
-    @_items ||= @merchant_repo.send_up(method: :find_all_by_merchant_id, destination: 'items', args: @id)
-  end
-
-  def send_down(message = {})
-    destination(message[:method]).send(message[:method], *message[:args])
+    @_items ||= @merchant_repo.send_to_engine(method: :find_all_by_merchant_id, destination: 'items', args: @id)
   end
 
   # Returns number of items owned by merchant.
@@ -45,7 +41,7 @@ class Merchant
   end
 
   def _invoices
-    @_invoices ||= @merchant_repo.engine.invoices.find_all_by_merchant_id(@id)
+    @_invoices ||= @merchant_repo.send_to_engine(method: :find_all_by_merchant_id, destination: 'invoices', args: @id)
   end
 
   def invoice_count
