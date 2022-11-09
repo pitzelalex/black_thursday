@@ -43,7 +43,7 @@ describe SalesEngine do
   describe '#send_to_repo' do
     it 'passes a message to the repo' do
       se = SalesEngine.from_csv(data)
-      expect(se.send_to_repo(method: :average_items_per_merchant).round(2)).to eq(0.25)
+      expect(se.send_to_repo(method: :_average_items_per_merchant).round(2)).to eq(0.25)
       expect(se.send_to_repo(method: :invoice_total, args: 1, destination: 'invoices')).to eq(5636.63)
     end
   end

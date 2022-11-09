@@ -10,7 +10,7 @@ class SalesAnalyst
   end
 
   def average_items_per_merchant
-    @engine.send_to_repo(method: :average_items_per_merchant).round(2)
+    @engine.send_to_repo(method: :_average_items_per_merchant).round(2)
   end
 
   def average_items_per_merchant_standard_deviation
