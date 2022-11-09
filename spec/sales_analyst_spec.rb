@@ -22,37 +22,37 @@ RSpec.describe SalesAnalyst do
   let(:engine) { SalesEngine.from_csv(data) }
   let(:analyst) { SalesAnalyst.new(engine) }
   describe '#initialize' do
-    xit 'exists' do
+    it 'exists' do
       expect(analyst).to be_a SalesAnalyst
     end
   end
 
   describe '#average_items_per_merchant' do
-    xit 'returns average # of items per merchant' do
+    it 'returns average # of items per merchant' do
       expect(analyst.average_items_per_merchant).to eq(2.88)
     end
   end
 
   describe '#average_items_per_merchant_standard_deviation' do
-    xit 'returns the strd dev for # of items per merchant' do
+    it 'returns the strd dev for # of items per merchant' do
       expect(analyst.average_items_per_merchant_standard_deviation).to eq(3.26)
     end
   end
 
   describe '#average_invoices_per_merchant' do
-    xit 'returns average # of invoices per merchant' do
+    it 'returns average # of invoices per merchant' do
       expect(analyst.average_invoices_per_merchant).to eq(10.49)
     end
   end
 
   describe '#average_invoices_per_merchant_standard_deviation' do
-    xit 'returns the std dev for # of invoices per merchant' do
+    it 'returns the std dev for # of invoices per merchant' do
       expect(analyst.average_invoices_per_merchant_standard_deviation).to eq(3.29)
     end
   end
 
   describe '#top_merchants_by_invoice_count' do
-    xit 'returns a collection of the merchants with a high deviation to the average' do
+    it 'returns a collection of the merchants with a high deviation to the average' do
       expected = analyst.top_merchants_by_invoice_count
       expect(expected).to be_a Array
       expect(expected).to all(be_a Merchant)
@@ -63,7 +63,7 @@ RSpec.describe SalesAnalyst do
   end
 
   describe '#bottom_merchants_by_invoice_count' do
-    xit 'returns a collection of the merchants with a low deviation to the average' do
+    it 'returns a collection of the merchants with a low deviation to the average' do
       expected = analyst.bottom_merchants_by_invoice_count
       expect(expected).to be_a Array
       expect(expected).to all(be_a Merchant)
@@ -74,7 +74,7 @@ RSpec.describe SalesAnalyst do
   end
 
   describe '#merchants_with_high_item_count' do
-    xit 'returns a list of merchants whose standard deviation of # of items is greater than 1' do
+    it 'returns a list of merchants whose standard deviation of # of items is greater than 1' do
       expected = analyst.merchants_with_high_item_count
       expect(expected).to be_a Array
       expect(expected).to all(be_a Merchant)
@@ -87,19 +87,19 @@ RSpec.describe SalesAnalyst do
   end
 
   describe '#average_item_price_for_merchant' do
-    xit "returns the average price of a merchant's items" do
+    it "returns the average price of a merchant's items" do
       expect(analyst.average_item_price_for_merchant(12_334_105)).to eq 16.66
     end
   end
 
   describe '#average_average_price_per_merchant' do
-    xit 'returns an average of all merchant average item price' do
+    it 'returns an average of all merchant average item price' do
       expect(analyst.average_average_price_per_merchant).to eq 350.29
     end
   end
 
   describe '#golden_items' do
-    xit 'returns an array of item objects that are 2 std dev above average item price' do
+    it 'returns an array of item objects that are 2 std dev above average item price' do
       expected = analyst.golden_items
       expect(expected).to be_a Array
       expect(expected).to all(be_a Item)
@@ -112,7 +112,7 @@ RSpec.describe SalesAnalyst do
   end
 
   describe '#invoice_status' do
-    xit 'returns an percent value for invoice objects that match the type symbol passed' do
+    it 'returns an percent value for invoice objects that match the type symbol passed' do
       expected = analyst.invoice_status(:shipped)
       expect(expected).to be_a Float
       expect(0..100).to include(expected)
@@ -120,7 +120,7 @@ RSpec.describe SalesAnalyst do
   end
 
   describe '#top_days_by_invoice_count' do
-    xit 'returns a collection of all days that are above the average by one std deviation' do
+    it 'returns a collection of all days that are above the average by one std deviation' do
       expected = analyst.top_days_by_invoice_count
       expect(expected).to be_a Array
       expected.each do |day|
@@ -130,20 +130,20 @@ RSpec.describe SalesAnalyst do
   end
 
   describe '#invoice_paid_in_full?' do
-    xit 'returns a boolean indicating whether or not an invoice has been paid' do
+    it 'returns a boolean indicating whether or not an invoice has been paid' do
       expect(analyst.invoice_paid_in_full?(46)).to be true
       expect(analyst.invoice_paid_in_full?(204)).to be false
     end
   end
 
   describe '#invoice_total' do
-    xit 'returns the total dollar value of an Invoice' do
+    it 'returns the total dollar value of an Invoice' do
       expect(analyst.invoice_total(1)).to eq 21067.77
     end
   end
 
   describe '#merchants_with_pending_invoices' do
-    xit 'returns an array of merchants with pending invoices' do
+    it 'returns an array of merchants with pending invoices' do
       expect(analyst.merchants_with_pending_invoices.length).to eq(467)
     end
   end
@@ -155,7 +155,7 @@ RSpec.describe SalesAnalyst do
   end
 
   describe '#top_revenue_earners' do
-    xit 'returns an array of x merchants ranked by revenue' do
+    it 'returns an array of x merchants ranked by revenue' do
       expected = analyst.top_revenue_earners(10)
 
       expect(expected.length).to eq 10
@@ -165,7 +165,7 @@ RSpec.describe SalesAnalyst do
       expect(expected.last.id).to eq 12335747
     end
 
-    xit "returns by default the top 20 merchants ranked by revenue if no argument is given" do
+    it "returns by default the top 20 merchants ranked by revenue if no argument is given" do
       expected = analyst.top_revenue_earners
 
       expect(expected.length).to eq 20
@@ -177,7 +177,7 @@ RSpec.describe SalesAnalyst do
   end
 
   describe '#revenue_by_merchant' do
-    xit 'returns the dollar value of the total revenue from a given merchant' do
+    it 'returns the dollar value of the total revenue from a given merchant' do
       expected = analyst.revenue_by_merchant(12334105)
       expect(expected.class).to eq BigDecimal
       expect(expected).to eq(0.7377717e5)
@@ -185,7 +185,7 @@ RSpec.describe SalesAnalyst do
   end
 
   describe '#merchants_with_only_one_item' do
-    xit 'returns a collection of merchants who only have one item' do
+    it 'returns a collection of merchants who only have one item' do
       expected_length = 243
       expected_class  = Merchant
       expect(analyst.merchants_with_only_one_item.length).to eq(expected_length)
@@ -194,7 +194,7 @@ RSpec.describe SalesAnalyst do
   end
 
   describe '#merchants_with_only_one_item_registered_in_month' do
-    xit 'returns a collection of merchants who only have one item per month registered' do
+    it 'returns a collection of merchants who only have one item per month registered' do
       expected_length = 21
       expected_class  = Merchant
       expect(analyst.merchants_with_only_one_item_registered_in_month('March').length).to eq(expected_length)
